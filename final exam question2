@@ -1,0 +1,93 @@
+1.
+#Complete binary tree ADT based on a singly linked list: 
+#The index of the first element is 0, and the elements are stored in the form of a singly linked list. 
+
+def get_parent(i):
+    return (i-1)/2
+
+def get_left_child(i):
+    return 2 * i + 1
+
+def get_right_child(i):
+    return 2 * i + 2
+2. 
+class MinPriorityQueue:
+    def __init__(self, head=None):
+        self.tree = CompleteBinaryTree(head)
+    
+    def insert(self, key):
+        """Insert an element with key into the priority queue."""
+        self.tree.head.append(Node(key))  # adds the new node at the end of the linkedlist
+        i = len(self.tree.head) - 1  # index of the new node
+        while i > 0:
+            parent = self.tree.parent(i)
+            if self.tree.head[i].key < parent.key:  # if the new node has a smaller key
+                # swap the new node with its parent
+                self.tree.head[i], parent = parent, self.tree.head[i]
+                i = (i-1)//2  # update the index to continue bubbling up
+            else:
+                break
+    
+    def delMin(self):
+        """Remove the element with the smallest key from the priority queue."""
+        if len(self.tree.head) == 0:
+            return None
+        elif len(self.tree.head) == 1:
+            return self.tree.head.pop(0)
+        else:
+            min_node = self.tree.head[0]  # save the root (min node) to return
+            self.tree.head[0] = self.tree.head.pop(-1)  # move the last node to the root
+            i = 0  # start at the root
+            while i < len(self.tree.head):
+                left_child = self.tree.left_child(i)
+                right_child = self.tree.right_child(i)
+                if left_child is None:
+                    break
+                elif right_child is None:
+                    if self.tree.head[i].key > left_child.key:
+                        self.tree.head[i], left_child = left_child, self.tree.head[i]
+                        i = 2*i+1
+                    break
+                else:
+                    # compare the left and right child to determine which one is smaller
+                    smaller_child = left_child if left_child.key < right_child.key else right_child
+                    if self.tree.head[i].key > smaller_child.key:
+                        self.tree.head[i], smaller_child = smaller_child, self.tree.head[i]
+                        i = 2*i+1 if smaller_child is left_child else 2*i+2
+                    else:
+                        break
+            return min_node
+
+
+3. 
+The time complexity of the insert() method in the minimum priority queue implementation I provided is O(log n).
+
+The insert() method first appends the new element to the end of the linked list, which takes O(1) time on average. Then it performs a bubbling up operation that goes up the tree from the newly added leaf node to the root. The maximum number of levels in a complete binary tree is log n, where n is the number of nodes in the tree. Since each level is traversed once, the total time complexity of the bubbling up operation is O(log n).
+
+The time complexity of the delMin() method in the minimum priority queue implementation I provided is also O(log n).
+
+The delMin() method first remove the root element from the linked list (i.e, minimum element), and then moves the last leaf element to the root position to maintain the complete binary tree property. Then it performs a bubbling down operation that goes down the tree from the root to the leaf nodes. The maximum number of levels in a complete binary tree is log n, where n is the number of nodes in the tree. Since each level is traversed once, the total time complexity of the bubbling down operation is O(log n).
+
+In both cases, the time complexity is O(log n) because the insert() and delMin() methods traverse at most log n levels in the tree, where n is the number of elements in the priority queue. This is because the linked list we are using is a complete binary tree and because the linked list is a linear data structure, the append and deletion in linked list takes O(1) time on average.
+
+
+4. 
+As a simple performance benchmark, we can test the time complexity of the insert() and delMin() methods by timing the execution of 1000 insertion and deletions on the priority queue. The results can be visualized using a line graph, with time on the y-axis and operations on the x-axis.
+
+5.
+ 
+code:
+digraph heap {
+    node [shape=circle, fixedsize=true];
+    "0" [label=0];
+    "1" [label=1];
+    "2" [label=2];
+    "3" [label=3];
+    "4" [label=4];
+    "0" -> "1";
+    "0" -> "2";
+    "1" -> "3";
+    "1" -> "4";
+    "2" -> "5";
+    "2" -> "6";
+}
