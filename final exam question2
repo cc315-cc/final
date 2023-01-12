@@ -72,7 +72,7 @@ In both cases, the time complexity is O(log n) because the insert() and delMin()
 
 
 4. 
-As a simple performance benchmark, we can test the time complexity of the insert() and delMin() methods by timing the execution of 1000 insertion and deletions on the priority queue. The results can be visualized using a line graph, with time on the y-axis and operations on the x-axis.
+We can test the time complexity of the insert() and delMin() methods by timing maybe 100 insert and delete operations on the priority queue. The results can be visualized with line chart, and timing on the Y-axis and operations on the X-axis.
 
 5.
  
